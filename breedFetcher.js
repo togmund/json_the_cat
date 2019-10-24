@@ -1,7 +1,7 @@
 // Outside Dependencies
 const request = require('request');
 const breedSearchEndpoint = `https://api.thecatapi.com/v1/breeds/search?q=`;
-const cliSearchTerm = process.argv.slice(2,3);
+const cliSearchTerm = process.argv.slice(2, 3);
 
 // Function Calls & Rendering new state
 request(`${breedSearchEndpoint}${cliSearchTerm}`, (error, response, body) => {
@@ -10,15 +10,20 @@ request(`${breedSearchEndpoint}${cliSearchTerm}`, (error, response, body) => {
   // console.log(`Typeof error: ${typeof error}`);
   // console.log(`Typeof response: ${typeof response}`);
   // console.log(`Typeof status code: ${typeof response.statusCode}`);
-  if (error)  {
+  if (error) {
     throw error;
   }
-  if (response !== 200) {
-    return `Expected "Status Code: 200", received "Status Code:${response.statusCode}"\r\nTry another search term.`
+  if (response.statusCode[1] !== 2) {
+    console.log(`Expected a 200-series status code, received "Status Code:${response.statusCode}"\r\nTry another search term.`);
   }
-  // Parsed body
-  const data = JSON.parse(body);
 
-  // Human Readable output
-  console.log(`Description:\n${data[0].description}`);
+  else {
+    // Parsed body
+    const data = JSON.parse(body);
+
+    // Human Readable output
+    console.log(`Description:\n${data[0].description}`);
+  }
+
+
 });
