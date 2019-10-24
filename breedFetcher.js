@@ -10,13 +10,12 @@ request(`${breedSearchEndpoint}${cliSearchTerm}`, (error, response, body) => {
   // console.log(`Typeof error: ${typeof error}`);
   // console.log(`Typeof response: ${typeof response}`);
   // console.log(`Typeof status code: ${typeof response.statusCode}`);
-  if (error) {
-    throw error;
+  if (error) { throw error; }
+  if (response.statusCode !== 200) {
+    console.log(`Expected a 200-series status code, received "Status Code: ${response.statusCode}"\r\nTry another search term.`);
+    return;
   }
-  if (response.statusCode[1] !== 2) {
-    console.log(`Expected a 200-series status code, received "Status Code:${response.statusCode}"\r\nTry another search term.`);
-  }
-
+  if (body === `[]`) { console.log(`Couldn't find that, try another search term.`); return;}
   else {
     // Parsed body
     const data = JSON.parse(body);
@@ -24,6 +23,4 @@ request(`${breedSearchEndpoint}${cliSearchTerm}`, (error, response, body) => {
     // Human Readable output
     console.log(`Description:\n${data[0].description}`);
   }
-
-
 });
