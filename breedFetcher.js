@@ -1,14 +1,17 @@
 const request = require('request');
 
 request(`https://api.thecatapi.com/v1/breeds/search?q=sib`, (error, response, body) => {
-  console.log(typeof error);
-  console.log(typeof response);
-  console.log(typeof response.statusCode);
+  // Response Types
+  console.log(`Typeof body: ${typeof body}`);
+  console.log(`Typeof error: ${typeof error}`);
+  console.log(`Typeof response: ${typeof response}`);
+  console.log(`Typeof status code: ${typeof response.statusCode}`);
 
+  // Parsed body
   const data = JSON.parse(body);
-  console.log(data);
-  console.log(typeof data);
 
+  // Human Readable output
+  console.log(`Description:\n${data[0].description}`);
 });
 
 
