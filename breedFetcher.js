@@ -7,8 +7,8 @@ const fetchBreedDescription = (breedName, callback) => {
   // console.log(`breedFetcher Fetch Initiated for ${breedName}`);
   request(`${breedSearchEndpoint}${breedName}`, (error, response, body) => {
     if (!error && response.statusCode === 200) {
-      if (body !== "[]") {
-        const data = JSON.parse(body);
+      const data = JSON.parse(body);
+      if (data.length !== 0) {
         callback(error, `Description:\r\n${data[0].description}`);
       } else {
         callback(error, `I didn't find anything with that search term.`);
