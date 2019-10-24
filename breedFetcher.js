@@ -1,22 +1,20 @@
 // Outside Dependencies
 const request = require('request');
-const breedSearchEndpoint = `https://api.thecatapi.com/v1/breeds/search?q=`;
 
 // Function Calls & Rendering new state
 const fetchBreedDescription = (breedName, callback) => {
-  console.log(`breedFetcher Fetch Initiated for ${breedName}`);
+  const breedSearchEndpoint = `https://api.thecatapi.com/v1/breeds/search?q=`;
+  // console.log(`breedFetcher Fetch Initiated for ${breedName}`);
   request(`${breedSearchEndpoint}${breedName}`, (error, response, body) => {
-    if (error) { throw error; }
-    if (response.statusCode !== 200) {
-      console.log(`Expected a 200-series status code, received "Status Code: ${response.statusCode}"\r\nTry another search term.`);
-      return;
-    }
-    if (body === `[]`) { console.log(`Couldn't find that, try another search term.`); return; }
-    else {
-      // Parsed body
-      const data = JSON.parse(body);
-      // Return Human Readable output
-      callback(error, data[0].description);
+    if (!error && response.statusCode === 200) {
+      if (body !== "[]") {
+        const data = JSON.parse(body);
+        callback(error, `Description:\r\n${data[0].description}`);
+      } else {
+        callback(error, `I didn't find anything with that search term.`);
+      }
+    } else {
+      callback(error, `error`);
     }
   });
 };
